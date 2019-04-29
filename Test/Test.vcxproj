@@ -72,26 +72,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\..\ThesisProject</OutDir>
     <TargetName>Lib$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
-    <IncludePath>E:\Programering\Godot\Libs\godot-cpp-master\godot_headers;E:\Programering\Godot\Libs\godot-cpp-master\include;E:\Programering\Godot\Libs\godot-cpp-master\include\gen;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Programering\Godot\Libs\godot-cpp-master\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\godot-cpp-master\include\gen;$(ProjectDir)..\..\godot-cpp-master\include;$(ProjectDir)..\..\godot-cpp-master\godot_headers;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\godot-cpp-master\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\..\ThesisProject</OutDir>
     <TargetName>Lib$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
-    <IncludePath>E:\Programering\Godot\Libs\godot-cpp-master\godot_headers;E:\Programering\Godot\Libs\godot-cpp-master\include;E:\Programering\Godot\Libs\godot-cpp-master\include\gen;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Programering\Godot\Libs\godot-cpp-master\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\godot-cpp-master\include\gen;$(ProjectDir)..\..\godot-cpp-master\include;$(ProjectDir)..\..\godot-cpp-master\godot_headers;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\godot-cpp-master\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\ThesisProject</OutDir>
     <TargetName>Lib$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
-    <IncludePath>E:\Programering\Godot\Libs\godot-cpp-master\godot_headers;E:\Programering\Godot\Libs\godot-cpp-master\include;E:\Programering\Godot\Libs\godot-cpp-master\include\gen;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Programering\Godot\Libs\godot-cpp-master\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\godot-cpp-master\include\gen;$(ProjectDir)..\..\godot-cpp-master\include;$(ProjectDir)..\..\godot-cpp-master\godot_headers;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\godot-cpp-master\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\ThesisProject</OutDir>
     <TargetName>Lib$(ProjectName)-$(Platform)-$(Configuration)</TargetName>
-    <IncludePath>E:\Programering\Godot\Libs\godot-cpp-master\godot_headers;E:\Programering\Godot\Libs\godot-cpp-master\include;E:\Programering\Godot\Libs\godot-cpp-master\include\gen;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Programering\Godot\Libs\godot-cpp-master\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\godot-cpp-master\include\gen;$(ProjectDir)..\..\godot-cpp-master\include;$(ProjectDir)..\..\godot-cpp-master\godot_headers;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\godot-cpp-master\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -101,7 +101,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libgodot-cpp.windows.debug.default;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libgodot-cpp.windows.$(Configuration).default;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -112,7 +112,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libgodot-cpp.windows.debug.default;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libgodot-cpp.windows.$(Configuration).default;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,7 +127,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>libgodot-cpp.windows.debug.default;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libgodot-cpp.windows.$(Configuration).default;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,7 +142,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>libgodot-cpp.windows.debug.default;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libgodot-cpp.windows.$(Configuration).default;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
