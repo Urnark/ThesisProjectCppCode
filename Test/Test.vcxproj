@@ -150,16 +150,20 @@
     <ClCompile Include="Algorithms\AStarSearch\AStarSearch.cpp" />
     <ClCompile Include="Algorithms\DNN\DNN.cpp" />
     <ClCompile Include="GodotLibrary.cpp" />
+    <ClCompile Include="Algorithms\GreedySearch\GreedySearch.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapHandeler.cpp" />
+    <ClCompile Include="Algorithms\NearestNeighbor\NearestNeighbor.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithms\AStar\AStar.h" />
     <ClInclude Include="Algorithms\AStarSearch\AStarSearch.h" />
     <ClInclude Include="Algorithms\DNN\DNN.h" />
+    <ClInclude Include="Algorithms\GreedySearch\GreedySearch.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapHandeler.h" />
+    <ClInclude Include="Algorithms\NearestNeighbor\NearestNeighbor.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

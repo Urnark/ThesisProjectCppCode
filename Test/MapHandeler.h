@@ -7,6 +7,8 @@
 #include "Algorithms/AStar/AStar.h"
 #include "Algorithms/AStarSearch/AStarSearch.h"
 #include "Algorithms/DNN/DNN.h"
+#include "Algorithms/NearestNeighbor/NearestNeighbor.h"
+#include "Algorithms/GreedySearch/GreedySearch.h"
 
 namespace godot
 {

@@ -36,6 +36,12 @@
     <ClCompile Include="Algorithms\DNN\DNN.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Algorithms\NearestNeighbor\NearestNeighbor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Algorithms\GreedySearch\GreedySearch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -54,6 +60,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Algorithms\DNN\DNN.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithms\NearestNeighbor\NearestNeighbor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithms\GreedySearch\GreedySearch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
