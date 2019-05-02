@@ -25,16 +25,7 @@ MapHandeler::~MapHandeler()
 
 void godot::MapHandeler::init(int width, int height, PoolIntArray var_intArray)
 {
-	Godot::print((Variant)width);
-	Godot::print((Variant)height);
-	Godot::print((Variant)var_intArray.size());
 	this->map.init(width, height, var_intArray);
-	/*for (int i = 0; i < var_intArray.size(); i++)
-	{
-		Variant var = var_intArray[i];
-		Godot::print("iterate");
-		Godot::print(var);
-	}*/
 }
 
 void godot::MapHandeler::cleanup()
