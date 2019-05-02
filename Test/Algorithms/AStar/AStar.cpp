@@ -88,6 +88,7 @@ PoolVector2Array AStar::calculatePath(Map& map, Vector2 start_pos, Vector2 end_p
 						MyTile* cell = map.tile(p);
 						if (p == end_pos)
 						{
+							cell->set_g(tile->get_g());
 							cell->set_parent(tile);
 							return makePath(map, start_pos, end_pos);
 						}

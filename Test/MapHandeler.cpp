@@ -57,7 +57,7 @@ PoolVector2Array godot::MapHandeler::calculatePath(int algorithm, Vector2 start_
 		path = DNN::calculatePath(this->map, start_pos, end_pos, goal_points);
 		break;
 	case 3:
-		path = GreedySearch::calculatePath2(this->map, start_pos, end_pos, goal_points);
+		path = GreedySearch::calculatePath(this->map, start_pos, end_pos, goal_points);
 		break;
 	case 4:
 		path = NearestNeighbor::calculatePath(this->map, start_pos, end_pos, goal_points);

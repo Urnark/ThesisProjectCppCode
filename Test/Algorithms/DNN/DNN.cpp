@@ -43,7 +43,6 @@ PoolVector2Array DNN::calculatePath(Map & map, Vector2 start_pos, Vector2 end_po
 	float current_bar_step = 0.0f;
 
 	PoolVector2Array path;
-	path.append(start_pos);
 
 	Vector2 current_pos = start_pos;
 	// Loop through all goals
@@ -56,6 +55,7 @@ PoolVector2Array DNN::calculatePath(Map & map, Vector2 start_pos, Vector2 end_po
 
 		// Calculate a path from the current position to the goal
 		PoolVector2Array path_to_goal = AStar::calculatePath(map, current_pos, goal);
+		float length = map.tile(goal)->get_g();
 
 		// See if a goal that is closer exists and if so use it instead
 		int step = 10;
@@ -68,7 +68,7 @@ PoolVector2Array DNN::calculatePath(Map & map, Vector2 start_pos, Vector2 end_po
 			{
 				// If the path to the new goal from the current position is shorter use it instead
 				PoolVector2Array temp_path_to_goal = AStar::calculatePath(map, current_pos, temp_goal);
-				if (temp_path_to_goal.size() < path_to_goal.size())
+				if (map.tile(temp_goal)->get_g() < length)
 				{
 					path_to_goal = temp_path_to_goal;
 					index = temp_index;
@@ -91,7 +91,7 @@ PoolVector2Array DNN::calculatePath(Map & map, Vector2 start_pos, Vector2 end_po
 	}
 	// Add the path that leads to the end position to the final path
 	PoolVector2Array path_to_goal = AStar::calculatePath(map, current_pos, end_pos);
-	for (int i = 1; i < path_to_goal.size(); i++)
+	for (int i = 1; i < path_to_goal.size() - 1; i++)
 		path.append(path_to_goal[(path_to_goal.size() - 1) - i]);
 
 	map.progress_bar_value = 1.0f;

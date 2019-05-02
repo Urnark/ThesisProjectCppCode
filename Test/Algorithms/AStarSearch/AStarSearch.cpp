@@ -26,7 +26,6 @@ PoolVector2Array AStarSearch::calculatePath(Map & map, Vector2 start_pos, Vector
 	float current_bar_step = 0.0f;
 
 	PoolVector2Array path;
-	path.append(start_pos);
 
 	Vector2 current_pos = start_pos;
 	while (goal_points.size() != 0)
@@ -34,10 +33,11 @@ PoolVector2Array AStarSearch::calculatePath(Map & map, Vector2 start_pos, Vector
 		int index = 0;
 		// Get the path from the current position to the closest goal
 		PoolVector2Array path_to_goal = AStar::calculatePath(map, current_pos, goal_points[0]);
+		float length = map.tile(goal_points[0])->get_g();
 		for (int i = 0; i < goal_points.size(); i++)
 		{
 			PoolVector2Array temp_path = AStar::calculatePath(map, current_pos, goal_points[i]);
-			if (path_to_goal.size() > temp_path.size())
+			if (map.tile(goal_points[i])->get_g() < length)
 			{
 				path_to_goal = temp_path;
 				index = i;
@@ -58,7 +58,7 @@ PoolVector2Array AStarSearch::calculatePath(Map & map, Vector2 start_pos, Vector
 	}
 	// Add the path that leads to the end position to the final path
 	PoolVector2Array path_to_goal = AStar::calculatePath(map, current_pos, end_pos);
-	for (int i = 1; i < path_to_goal.size(); i++)
+	for (int i = 1; i < path_to_goal.size() - 1; i++)
 		path.append(path_to_goal[(path_to_goal.size() - 1) - i]);
 
 	map.progress_bar_value = 1.0f;

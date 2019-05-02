@@ -15,72 +15,6 @@ class GreedySearch
 public:
 	GreedySearch();
 	~GreedySearch();
-	
-	struct NodeItem
-	{
-		Vector2 node;
-		int nrOfConnections = 0;
-		NodeItem* connectedNode1 = nullptr;
-		NodeItem* connectedNode2 = nullptr;
-		int specialConnection = 0; // 0 = none      1 = start        2 = end
-
-		NodeItem(Vector2 p_node)
-		{
-			node = p_node;
-		}
-
-		bool equals(NodeItem* other)
-		{
-			if (node == other->node)
-				return true;
-			return false;
-		}
-
-		bool operator==(const NodeItem& B)
-		{
-			if (node == B.node)
-				return true;
-			return false;
-		}
-	};
-
-	struct PathItem 
-	{
-		int length;
-		NodeItem* node1;
-		NodeItem* node2;
-		PoolVector2Array path;
-
-		PathItem(int p_length, NodeItem* p_node1, NodeItem* p_node2, PoolVector2Array p_path)
-		{
-			length = p_length;
-			node1 = p_node1;
-			node2 = p_node2;
-			path = p_path;
-		}
-
-		bool equals(PathItem& other)
-		{
-			if (length == other.length && node1->equals(other.node1) && node2->equals(other.node2))
-				return true;
-			return false;
-		}
-
-		bool operator==(const PathItem& B)
-		{
-			if (length == B.length && node1->equals(B.node1) && node2->equals(B.node2))
-				return true;
-			return false;
-		}
-		
-
-	};
-
-
-
-
-	static PoolVector2Array calculatePath(Map& map, Vector2 start_pos, Vector2 end_pos, PoolVector2Array goal_points);
-	//static PoolVector2Array calculatePath2(Map& map, Vector2 start_pos, Vector2 end_pos, PoolVector2Array goal_points);
 
 	struct GPath;
 
@@ -276,6 +210,7 @@ public:
 		GNode* start = nullptr;
 		GNode* end = nullptr;
 		PoolVector2Array path;
+		float length = 0.0f;
 		bool reverse = false;
 		bool used = false;
 		static int ID;
@@ -320,7 +255,7 @@ public:
 
 		String to_string()
 		{
-			String line = this->id_str() + " {(" + (String)this->start->pos + "), (" + (String)this->end->pos + ")}";
+			String line = this->id_str() + ", length: " + String(std::to_string(length).c_str()) + ", " + " {(" + (String)this->start->pos + "), (" + (String)this->end->pos + ")}";
 			line += ", Start { parent1: " + (this->start->parent1 == nullptr ? "null" : this->start->parent1->id_str()) + ", parent2: " +
 				(this->start->parent2 == nullptr ? "null" : this->start->parent2->id_str()) + " }";
 			line += ", End { parent1: " + (this->end->parent1 == nullptr ? "null" : this->end->parent1->id_str()) + ", parent2: " +
@@ -343,11 +278,9 @@ public:
 		}
 	};
 
-	static PoolVector2Array calculatePath2(Map& map, Vector2 start_pos, Vector2 end_pos, PoolVector2Array goal_points);
+	static PoolVector2Array calculatePath(Map& map, Vector2 start_pos, Vector2 end_pos, PoolVector2Array goal_points);
 
 private:
-	static int pathLength(NodeItem* startNode);
-
 	static void increaseProgress(Map& map, float bar_step, bool reset = false)
 	{
 		static float current_bar_step = 0.0f;
