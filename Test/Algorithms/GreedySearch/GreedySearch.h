@@ -348,9 +348,15 @@ public:
 private:
 	static int pathLength(NodeItem* startNode);
 
-	static void increaseProgress(Map& map, float bar_step)
+	static void increaseProgress(Map& map, float bar_step, bool reset = false)
 	{
 		static float current_bar_step = 0.0f;
+		if (reset)
+		{
+			current_bar_step = 0.0f;
+			return;
+		}
+
 		current_bar_step += bar_step;
 		if (current_bar_step > 1.0f) current_bar_step = 1.0f;
 		map.progress_bar_value = current_bar_step;

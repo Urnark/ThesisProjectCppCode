@@ -346,6 +346,7 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 
 	map.progress_bar_value = 0.0f;
 	map.progress_bar_visible = true;
+	increaseProgress(map, 0, true);
 	float nr_of_nodes = goal_points.size() + 2.0f;
 	float edges = ((nr_of_nodes)*((nr_of_nodes - 1))) / 2.0f;
 	float total = (float)(nr_of_nodes * 7 - 4 + edges * 2);
@@ -622,6 +623,10 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 		delete path;
 		increaseProgress(map, bar_step);
 	}
+
+
+	map.progress_bar_value = 1.0f;
+	map.progress_bar_visible = false;
 
 	return final_path;
 }

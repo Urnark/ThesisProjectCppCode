@@ -67,7 +67,9 @@ PoolVector2Array NearestNeighbor::calculatePath(Map & map, Vector2 start_pos, Ve
 		}
 
 		currentNode = closestNode;
-		
+
+		current_bar_step += bar_step;
+		map.progress_bar_value = current_bar_step;
 
 		if (index >= 0)
 		{
@@ -83,6 +85,10 @@ PoolVector2Array NearestNeighbor::calculatePath(Map & map, Vector2 start_pos, Ve
 	{
 		path.append(finalPath[finalPath.size() - 2 - i]);
 	}
+
+
+	map.progress_bar_value = 1.0f;
+	map.progress_bar_visible = false;
 
 	return path;
 }
