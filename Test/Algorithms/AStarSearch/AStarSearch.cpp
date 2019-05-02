@@ -2,8 +2,6 @@
 
 PoolVector2Array AStarSearch::calculatePath(Map & map, Vector2 start_pos, Vector2 end_pos, PoolVector2Array goal_points)
 {
-	Godot::print("AStarSearch");
-
 	if (start_pos == end_pos)
 	{
 		Godot::print("Error: start_pos == end_pos");

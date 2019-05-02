@@ -19,8 +19,6 @@ Vector2 DNN::nn(PoolVector2Array & all, Vector2 pos, int& index)
 
 PoolVector2Array DNN::calculatePath(Map & map, Vector2 start_pos, Vector2 end_pos, PoolVector2Array goal_points)
 {
-	Godot::print("DNN ?");
-
 	if (start_pos == end_pos)
 	{
 		Godot::print("Error: start_pos == end_pos");

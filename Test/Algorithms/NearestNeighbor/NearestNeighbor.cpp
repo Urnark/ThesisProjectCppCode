@@ -13,8 +13,6 @@ NearestNeighbor::~NearestNeighbor()
 
 PoolVector2Array NearestNeighbor::calculatePath(Map & map, Vector2 start_pos, Vector2 end_pos, PoolVector2Array goal_points)
 {
-	Godot::print("Nearest Neighbor");
-
 	if (start_pos == end_pos)
 	{
 		Godot::print("Error: start_pos == end_pos");
@@ -40,8 +38,6 @@ PoolVector2Array NearestNeighbor::calculatePath(Map & map, Vector2 start_pos, Ve
 
 	Vector2 currentNode = start_pos;
 	Vector2 closestNode;
-
-	Godot::print("Before while");
 	
 	while (goal_points.size() > 0)
 	{
@@ -76,8 +72,6 @@ PoolVector2Array NearestNeighbor::calculatePath(Map & map, Vector2 start_pos, Ve
 			goal_points.remove(index);
 		}
 	}
-
-	Godot::print("After while");
 
 	PoolVector2Array finalPath = AStar::calculatePath(map, currentNode, end_pos);
 

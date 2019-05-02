@@ -15,8 +15,6 @@ int GreedySearch::GPath::ID = 0;
 
 PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vector2 end_pos, PoolVector2Array goal_points)
 {
-	Godot::print("GreedySearch2");
-
 	if (start_pos == end_pos)
 	{
 		Godot::print("Error: start_pos == end_pos");
@@ -56,7 +54,7 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 	GNode* startNode = goalNodes[0];
 	GNode* endNode = goalNodes[1];
 
-	Godot::print("Before adding all possible paths");
+	//Godot::print("Before adding all possible paths");
 	//Add all possible paths to allPaths
 	std::vector<GPath*> all_paths;
 	std::vector<GPath*> copy_for_clearing_memory_of_all_paths;
@@ -91,7 +89,7 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 		}
 	}
 
-	Godot::print("Before sorting all paths");
+	//Godot::print("Before sorting all paths");
 	std::qsort(&all_paths[0], all_paths.size(), sizeof(GPath*), [](const void* A, const void* B)
 	{
 		const GPath* arg1 = *(const GPath**)(A);
@@ -102,7 +100,7 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 		return 0;
 	});
 
-	Godot::print("Before connecting start to end");
+	//Godot::print("Before connecting start to end");
 	std::vector<GPath*> selected_paths;
 	startNode->next = endNode;
 	endNode->prev = startNode;
@@ -122,7 +120,7 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 		}
 	}
 
-	Godot::print("Before picking shortest paths");
+	//Godot::print("Before picking shortest paths");
 	while (!all_paths.empty())
 	{
 		GNode* p1 = all_paths[0]->start;
@@ -203,7 +201,7 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 		increaseProgress(map, bar_step);
 	}
 
-	Godot::print("Sorted paths");
+	//Godot::print("Sorted paths");
 	// Sort the paths so they go from start node to end node
 	startNode->next = nullptr;
 	endNode->prev = nullptr;
