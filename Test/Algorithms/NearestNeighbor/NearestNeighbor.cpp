@@ -84,7 +84,5 @@ PoolVector2Array NearestNeighbor::calculatePath(Map & map, Vector2 start_pos, Ve
 		path.append(finalPath[finalPath.size() - 2 - i]);
 	}
 
-	Godot::print((Variant)path);
-
 	return path;
 }

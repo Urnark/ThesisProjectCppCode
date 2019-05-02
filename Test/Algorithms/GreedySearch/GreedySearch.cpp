@@ -322,6 +322,8 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 	return path;
 }
 
+int GreedySearch::GPath::ID = 0;
+
 PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vector2 end_pos, PoolVector2Array goal_points)
 {
 	Godot::print("GreedySearch2");
@@ -344,17 +346,22 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 
 	map.progress_bar_value = 0.0f;
 	map.progress_bar_visible = true;
-	float bar_step = 1.0f / ((float)goal_points.size() + 2.0f);
-	float current_bar_step = 0.0f;
+	float nr_of_nodes = goal_points.size() + 2.0f;
+	float edges = ((nr_of_nodes)*((nr_of_nodes - 1))) / 2.0f;
+	float total = (float)(nr_of_nodes * 7 - 4 + edges * 2);
+	float bar_step = 1.0f / total;
 
 	PoolVector2Array final_path;
 
 	std::vector<GNode*> goalNodes;
 	goalNodes.push_back(new GNode(start_pos));
+	increaseProgress(map, bar_step);
 	goalNodes.push_back(new GNode(end_pos));
+	increaseProgress(map, bar_step);
 	for (int i = 0; i < goal_points.size(); i++)
 	{
 		goalNodes.push_back(new GNode(goal_points[i]));
+		increaseProgress(map, bar_step);
 	}
 	GNode* startNode = goalNodes[0];
 	GNode* endNode = goalNodes[1];
@@ -362,6 +369,7 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 	Godot::print("Before adding all possible paths");
 	//Add all possible paths to allPaths
 	std::vector<GPath*> all_paths;
+	std::vector<GPath*> copy_for_clearing_memory_of_all_paths;
 	bool exists = false;
 	for (GNode* node1 : goalNodes)
 	{
@@ -384,6 +392,9 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 				if (!exists)
 				{
 					all_paths.push_back(new GPath(node1, node2, AStar::calculatePath(map, node1->pos, node2->pos)));
+					all_paths.back()->set_parents();
+					copy_for_clearing_memory_of_all_paths.push_back(all_paths.back());
+					increaseProgress(map, bar_step);
 				}
 			}
 		}
@@ -400,33 +411,20 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 		return 0;
 	});
 
-	Godot::print("Sorted:");
-	for (int i = 0; i < all_paths.size(); i++)
-	{
-		Godot::print((Variant)all_paths[i]->path.size());
-	}
-
 	Godot::print("Before connecting start to end");
 	std::vector<GPath*> selected_paths;
 	startNode->next = endNode;
 	endNode->prev = startNode;
-	Godot::print((Variant)startNode->pos);
-	Godot::print((Variant)endNode->pos);
 	GPath* path = startNode->parent1;
-	Godot::print((Variant)startNode->parent1->start->pos);
-	Godot::print((Variant)startNode->parent1->end->pos);
-	Godot::print((Variant)startNode->parent2->start->pos);
-	Godot::print((Variant)startNode->parent2->end->pos);
-	if (path->start == endNode || path->end == endNode) {}
-	else
+	if (path->start != endNode && path->end != endNode)
 		path = startNode->parent2;
 
 	for (auto it = all_paths.begin(); it != all_paths.end(); it++)
 	{
 		if ((*it) == path)
 		{
-			Godot::print((Variant)(*it)->start->pos);
-			Godot::print((Variant)(*it)->end->pos);
+			increaseProgress(map, bar_step);
+
 			selected_paths.push_back((*it));
 			all_paths.erase(it);
 			break;
@@ -446,8 +444,7 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 			PoolVector2Array temp = p1->getCircularConnection(p2);
 			if (temp[temp.size() - 1] != p2->pos || selected_paths.size() == goalNodes.size() - 1)
 			{
-				current_bar_step += bar_step;
-				map.progress_bar_value = current_bar_step;
+				increaseProgress(map, bar_step);
 
 				selected_paths.push_back((*it));
 				if (p1->next == nullptr)
@@ -475,7 +472,6 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 			{
 				if ((*it)->start->pos == p1->pos || (*it)->end->pos == p1->pos)
 				{
-					delete (*it);
 					it = all_paths.erase(it);
 				}
 				else
@@ -484,13 +480,13 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 				}
 			}
 		}
+		// Remove all the paths that is connected to a node that has two connections
 		if (p2->next != nullptr && p2->prev != nullptr)
 		{
 			for (auto it = all_paths.begin(); it != all_paths.end();)
 			{
 				if ((*it)->start->pos == p2->pos || (*it)->end->pos == p2->pos)
 				{
-					delete (*it);
 					it = all_paths.erase(it);
 				}
 				else
@@ -504,52 +500,37 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 	// Remove connection from start to end
 	selected_paths.erase(selected_paths.begin());
 
-	Godot::print("Testing2:");
+	// Update the parent pointers in every Node
 	for (int i = 0; i < selected_paths.size(); i++)
 	{
-		Godot::print((Variant)selected_paths[i]->start->pos);
-		Godot::print((Variant)selected_paths[i]->end->pos);
+		selected_paths[i]->clear_parents();
+		increaseProgress(map, bar_step);
+	}
+	for (int i = 0; i < selected_paths.size(); i++)
+	{
+		selected_paths[i]->set_parents();
+		increaseProgress(map, bar_step);
 	}
 
-	//std::vector<GPath> sorted_paths;
-	//sorted_paths.push_back(selected_paths[0]);
 
-	/*std::vector<GPath> sorted_paths;
-	sorted_paths.push_back(selected_paths[0]);
-	GPath& oldPath = selected_paths[0];
-	GNode* old = selected_paths[0].end;
-	GNode* n = sorted_paths.back().end->next;
-	if (n == sorted_paths.back().start)
-		n = sorted_paths.back().end->prev;
-	while (n != selected_paths[0].start)
+	/*
+	Godot::print("Testing:");
+	for (int i = 0; i < selected_paths.size(); i++)
 	{
-		if (n->parent1 == &oldPath)
-		{
-			sorted_paths.push_back(*n->parent2);
-			oldPath = *n->parent2;
-		}
-		else
-		{
-			sorted_paths.push_back(*n->parent1);
-			oldPath = *n->parent1;
-		}
-		//GNode* nn = n;
-		//n = (n->next != old ? n->next : n->prev);
-		//old = nn;
-		n = sorted_paths.back().end->next;
-		if (n == sorted_paths.back().start)
-			n = sorted_paths.back().end->prev;
+		Godot::print(selected_paths[i]->to_string());
 	}*/
 
-	startNode->next = nullptr;
-	endNode->prev = nullptr;
-	Godot::print("Sorted paths2");
+	Godot::print("Sorted paths");
 	/*std::vector<GPath*> sorted_paths = startNode->getCircularConnectionPaths(endNode);
 	for (GPath* gpath : sorted_paths)
 	{
 		Godot::print((Variant)gpath->start->pos);
 		Godot::print((Variant)gpath->end->pos);
 	}*/
+	
+	// Sort the paths so they go from start node to end node
+	startNode->next = nullptr;
+	endNode->prev = nullptr;
 	std::vector<GPath*> sorted_paths;
 	for (int i = 0; i < selected_paths.size(); i++)
 	{
@@ -605,57 +586,41 @@ PoolVector2Array GreedySearch::calculatePath2(Map & map, Vector2 start_pos, Vect
 				}
 			}
 		}
+
+		increaseProgress(map, bar_step);
 	}
 
+	// Place all the nodes in all the selected sorted paths in the final path
 	for (GPath* gpath : sorted_paths)
 	{
 		if (gpath->reverse == false)
 		{
-			for (int i = 0; i < gpath->path.size(); i++)
+			for (int i = (gpath == sorted_paths[0] ? 1 : 0); i < gpath->path.size() - 1; i++)
 			{
 				final_path.append(gpath->path[i]);
 			}
 		}
 		else
 		{
-			for (int i = 0; i < gpath->path.size(); i++)
+			for (int i = (gpath == sorted_paths[0] ? 1 : 0); i < gpath->path.size() - 1; i++)
 			{
 				final_path.append(gpath->path[gpath->path.size() - 1 - i]);
 			}
 		}
+
+		increaseProgress(map, bar_step);
 	}
 
-	/*
-	Vector2 lastNode = selected_paths[0].path[0];
-	for (GPath& item : selected_paths)
-	{
-		if (item.path[0] == lastNode)
-		{
-			for (int i = 0; i < item.path.size(); i++)
-			{
-				final_path.append(item.path[i]);
-				lastNode = item.path[item.path.size() - 1];
-			}
-		}
-		else
-		{
-			for (int i = 0; i < item.path.size(); i++)
-			{
-				final_path.append(item.path[item.path.size() - 1 - i]);
-				lastNode = item.path[0];
-			}
-		}
-	}*/
-
-	Godot::print((Variant)final_path);
-
+	// Delete memorry that has been allocated
 	for (GNode* node : goalNodes)
 	{
 		delete node;
+		increaseProgress(map, bar_step);
 	}
-	for (GPath* path : selected_paths)
+	for (GPath* path : copy_for_clearing_memory_of_all_paths)
 	{
 		delete path;
+		increaseProgress(map, bar_step);
 	}
 
 	return final_path;

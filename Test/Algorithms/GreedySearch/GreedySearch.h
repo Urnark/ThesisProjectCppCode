@@ -6,6 +6,7 @@
 #include "../../Map.h"
 #include <vector>
 #include "../AStar/AStar.h"
+#include <string>
 
 using namespace godot;
 
@@ -277,6 +278,8 @@ public:
 		PoolVector2Array path;
 		bool reverse = false;
 		bool used = false;
+		static int ID;
+		int id = 0;
 
 		GPath(GNode* start, GNode* end, PoolVector2Array path)
 		{
@@ -284,6 +287,21 @@ public:
 			this->end = end;
 			this->path = path;
 
+			ID++;
+			id = ID;
+		}
+
+		void clear_parents()
+		{
+			this->start->parent1 = nullptr;
+			this->start->parent2 = nullptr;
+			this->end->parent1 = nullptr;
+			this->end->parent2 = nullptr;
+
+		}
+
+		void set_parents()
+		{
 			if (this->start->parent1 == nullptr)
 				this->start->parent1 = this;
 			else
@@ -293,6 +311,22 @@ public:
 				this->end->parent1 = this;
 			else
 				this->end->parent2 = this;
+		}
+
+		String id_str()
+		{
+			return String(std::to_string(id).c_str());
+		}
+
+		String to_string()
+		{
+			String line = this->id_str() + " {(" + (String)this->start->pos + "), (" + (String)this->end->pos + ")}";
+			line += ", Start { parent1: " + (this->start->parent1 == nullptr ? "null" : this->start->parent1->id_str()) + ", parent2: " +
+				(this->start->parent2 == nullptr ? "null" : this->start->parent2->id_str()) + " }";
+			line += ", End { parent1: " + (this->end->parent1 == nullptr ? "null" : this->end->parent1->id_str()) + ", parent2: " +
+				(this->end->parent2 == nullptr ? "null" : this->end->parent2->id_str()) + " }";
+
+			return line;
 		}
 
 		bool operator==(const GPath& other)
@@ -313,5 +347,13 @@ public:
 
 private:
 	static int pathLength(NodeItem* startNode);
+
+	static void increaseProgress(Map& map, float bar_step)
+	{
+		static float current_bar_step = 0.0f;
+		current_bar_step += bar_step;
+		if (current_bar_step > 1.0f) current_bar_step = 1.0f;
+		map.progress_bar_value = current_bar_step;
+	}
 };
 
