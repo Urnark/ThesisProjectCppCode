@@ -36,7 +36,7 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 	increaseProgress(map, 0, true);
 	float nr_of_nodes = goal_points.size() + 2.0f;
 	float edges = ((nr_of_nodes)*((nr_of_nodes - 1))) / 2.0f;
-	float total = (float)(nr_of_nodes * 7 - 4 + edges * 2);
+	float total = (float)(nr_of_nodes * 6 - 3 + edges * 2);
 	float bar_step = 1.0f / total;
 
 	PoolVector2Array final_path;
@@ -81,7 +81,7 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 				{
 					all_paths.push_back(new GPath(node1, node2, AStar::calculatePath(map, node1->pos, node2->pos)));
 					all_paths.back()->length = map.tile(node2->pos)->get_g();
-					all_paths.back()->set_parents();
+					//all_paths.back()->set_parents();
 					copy_for_clearing_memory_of_all_paths.push_back(all_paths.back());
 					increaseProgress(map, bar_step);
 				}
@@ -104,13 +104,13 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 	std::vector<GPath*> selected_paths;
 	startNode->next = endNode;
 	endNode->prev = startNode;
-	GPath* path = startNode->parent1;
-	if (path->start != endNode && path->end != endNode)
-		path = startNode->parent2;
+	//GPath* path = startNode->parent1;
+	//if (path->start != endNode && path->end != endNode)
+	//	path = startNode->parent2;
 
 	for (auto it = all_paths.begin(); it != all_paths.end(); it++)
 	{
-		if ((*it) == path)
+		if (((*it)->start == startNode && (*it)->end == endNode) || ((*it)->start == endNode && (*it)->end == startNode))//(*it) == path)
 		{
 			increaseProgress(map, bar_step);
 
@@ -134,6 +134,8 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 			if (temp[temp.size() - 1] != p2->pos || selected_paths.size() == goalNodes.size() - 1)
 			{
 				increaseProgress(map, bar_step);
+
+				(*it)->set_parents();
 
 				selected_paths.push_back((*it));
 				if (p1->next == nullptr)
@@ -190,7 +192,7 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 	selected_paths.erase(selected_paths.begin());
 
 	// Update the parent pointers in every Node
-	for (int i = 0; i < selected_paths.size(); i++)
+	/*for (int i = 0; i < selected_paths.size(); i++)
 	{
 		selected_paths[i]->clear_parents();
 		increaseProgress(map, bar_step);
@@ -199,7 +201,7 @@ PoolVector2Array GreedySearch::calculatePath(Map & map, Vector2 start_pos, Vecto
 	{
 		selected_paths[i]->set_parents();
 		increaseProgress(map, bar_step);
-	}
+	}*/
 
 	//Godot::print("Sorted paths");
 	// Sort the paths so they go from start node to end node
